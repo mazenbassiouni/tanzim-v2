@@ -7,10 +7,18 @@ use App\Filament\Resources\SoliderResource\RelationManagers;
 use App\Models\Person;
 use App\Models\Solider;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -31,7 +39,83 @@ class SoliderResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('military_num')
+                    ->label('الرقم العسكرى')
+                    ->required(),
+                Select::make('rank_id')
+                    ->label('الدرجة')
+                    ->disabled()
+                    ->default(27)
+                    ->relationship(name: 'rank',titleAttribute: 'name', modifyQueryUsing: fn (Builder $query) => $query->where('id', 27))
+                    ->required(),
+                TextInput::make('name')
+                    ->label('الاسم')
+                    ->required(),
+                Select::make('speciality_id')
+                    ->label('التخصص')
+                    ->relationship(name: 'speciality',titleAttribute: 'name', modifyQueryUsing: fn (Builder $query) => $query->where('is_officer', false)->orderBy('name'))
+                    ->native(false)
+                    ->searchable()
+                    ->preload()
+                    ->required(fn (Get $get) => !$get('is_mission') || $get('is_force'))
+                    ->hidden(fn (Get $get) => !$get('is_force') && $get('is_mission')),
+                Select::make('mil_unit_id')
+                    ->label('التسكين')
+                    ->relationship(name: 'milUnit',titleAttribute: 'name')
+                    ->native(false)
+                    ->required(fn (Get $get) => !$get('is_mission') || $get('is_force'))
+                    ->hidden(fn (Get $get) => !$get('is_force') && $get('is_mission')),
+                Select::make('unit_id')
+                    ->label('التسكين الداخلى')
+                    ->relationship(name: 'unit',titleAttribute: 'name')
+                    ->native(false)
+                    ->required(),  
+                DatePicker::make('join_date')
+                    ->label('تاريخ الضم')
+                    ->required(fn (Get $get) => !$get('is_mission') || $get('is_force'))
+                    ->hidden(fn (Get $get) => !$get('is_force') && $get('is_mission')),
+                TextInput::make('join_desc')
+                    ->label('ملاحظات الضم')
+                    ->hidden(fn (Get $get) => !$get('is_force') && $get('is_mission')),
+                Select::make('medical_state')
+                    ->default(1)
+                    ->options([
+                        1 => 'لائق',
+                        0 => 'غير لائق',
+                        2 => 'لائق للمستوى الادنى',
+                    ])
+                    ->native(false)
+                    ->label('الموقف الطبي')
+                    ->required(fn (Get $get) => !$get('is_mission'))
+                    ->hidden(fn (Get $get) => $get('is_mission')),
+                TextInput::make('medical_cause')
+                    ->label('ملاحظات الموقف الطبي')
+                    ->hidden(fn (Get $get) => $get('is_mission')),
+                DatePicker::make('lay_off_date')
+                    ->label('تاريخ التسريح')
+                    ->required(),
+                Grid::make(2)
+                    ->schema([
+                        Toggle::make('is_force')
+                            ->label('قوة')
+                            ->inline(false)
+                            ->default(true)
+                            ->live(),
+                        Toggle::make('is_mission')
+                            ->label('مأمورية')
+                            ->inline(false)
+                            ->default(false)
+                            ->live()
+                            ->hidden(fn (Get $get) => $get('is_force')),
+                    ]),
+                DatePicker::make('delete_date')
+                    ->label('تاريخ الشطب')
+                    ->required(fn (Get $get) => !$get('is_force') && !$get('is_mission'))
+                    ->hidden(fn (Get $get) => $get('is_force') || $get('is_mission')),
+                TextInput::make('delete_desc')
+                    ->label('ملاحظات الشطب')
+                    ->required(fn (Get $get) => !$get('is_force') && !$get('is_mission'))
+                    ->hidden(fn (Get $get) => $get('is_force') || $get('is_mission')),
             ]);
     }
 
@@ -39,15 +123,66 @@ class SoliderResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('rank.name')->label('الرتبة'),
-                TextColumn::make('name')->label('الاسم'),
+                TextColumn::make('military_num')
+                    ->label('الرقم العسكرى')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('rank.name')
+                    ->label('الدرجة'),
+                TextColumn::make('name')
+                    ->label('الاسم')
+                    ->searchable(),
+                TextColumn::make('lay_off_date')
+                    ->label('تاريخ التسريح')
+                    ->date('Y-m-d')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('milUnit.name')
+                    ->label('التسكين')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('unit.name')
+                    ->label('التسكين الداخلى')
+                    ->toggleable(),
+                TextColumn::make('speciality.name')
+                    ->label('التخصص'),
+                TextColumn::make('speciality.category.name')
+                    ->label('الفئة')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                TernaryFilter::make('is_force')
+                    ->label('قوة')
+                    ->trueLabel('نعم')
+                    ->falseLabel('لا')
+                    ->placeholder('الكل')
+                    ->default(true),
+                SelectFilter::make('category')
+                    ->multiple()
+                    ->preload()
+                    ->label('الفئة')
+                    ->relationship('speciality.category', 'name', fn (Builder $query) => $query->orderBy('id')),
+                SelectFilter::make('speciality')
+                    ->multiple()
+                    ->searchable()
+                    ->preload()
+                    ->label('التخصص')
+                    ->relationship('speciality', 'name', fn (Builder $query) => $query->whereIsOfficer(false)),
+                SelectFilter::make('milUnit')
+                    ->multiple()
+                    ->searchable()
+                    ->preload()
+                    ->label('التسكين')
+                    ->relationship('milUnit', 'name'),
+                SelectFilter::make('unit')
+                    ->multiple()
+                    ->searchable()
+                    ->preload()
+                    ->label('التسكين الداخلى')
+                    ->relationship('unit', 'name'),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()->iconButton(),
+                Tables\Actions\EditAction::make()->iconButton(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -75,6 +210,8 @@ class SoliderResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('is_force', true)->where('rank_id',27)->orderBy('rank_id');
+        return parent::getEloquentQuery()
+                ->with('rank', 'speciality.category', 'milUnit', 'unit')
+                ->where('rank_id',27);
     }
 }
