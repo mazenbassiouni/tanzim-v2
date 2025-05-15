@@ -30,7 +30,7 @@ class OfficerResource extends Resource
 
     protected static ?string $navigationLabel = 'الضباط';
 
-    protected static ?string $modelLabel = 'فرد';
+    protected static ?string $modelLabel = 'ضابط';
 
     protected static ?string $pluralLabel = 'الضباط';
 
@@ -98,7 +98,7 @@ class OfficerResource extends Resource
                             ->default(true)
                             ->live(),
                         Toggle::make('is_mission')
-                            ->label('مأمورية')
+                            ->label('مأمورية / الحاق')
                             ->inline(false)
                             ->default(false)
                             ->live()

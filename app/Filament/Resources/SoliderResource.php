@@ -102,7 +102,7 @@ class SoliderResource extends Resource
                             ->default(true)
                             ->live(),
                         Toggle::make('is_mission')
-                            ->label('مأمورية')
+                            ->label('مأمورية / الحاق')
                             ->inline(false)
                             ->default(false)
                             ->live()

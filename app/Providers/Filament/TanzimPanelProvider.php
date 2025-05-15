@@ -60,6 +60,10 @@ class TanzimPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->brandLogo(asset('pngs/logo.png'))
+            ->brandLogoHeight('3rem')
+            ->favicon(asset('pngs/logo.png'))
+            ->viteTheme('resources/css/filament/tanzim/theme.css');
     }
 }
