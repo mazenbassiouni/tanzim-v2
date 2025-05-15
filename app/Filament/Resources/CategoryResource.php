@@ -6,6 +6,7 @@ use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
 use Filament\Forms;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -35,7 +36,25 @@ class CategoryResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->label('الاسم'),
-            ]);
+                Repeater::make('tasks')
+                    ->label('البنود')
+                    ->relationship()
+                    ->schema([
+                        TextInput::make('title')
+                            ->required()
+                            ->maxLength(255)
+                            ->label('اسم البند'),
+                        TextInput::make('order')
+                            ->required()
+                            ->numeric()
+                            ->label('الترتيب'),
+                        TextInput::make('description')
+                            ->label('الوصف')
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(2),
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table

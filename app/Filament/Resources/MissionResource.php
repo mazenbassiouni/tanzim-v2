@@ -101,7 +101,7 @@ class MissionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\TasksRelationManager::class,
         ];
     }
 
@@ -109,7 +109,7 @@ class MissionResource extends Resource
     {
         return [
             'index' => Pages\ListMissions::route('/'),
-            'create' => Pages\CreateMission::route('/create'),
+            // 'create' => Pages\CreateMission::route('/create'),
             // 'view' => Pages\ViewMission::route('/{record}'),
             'custom-edit' => Pages\EditMission::route('/{record}/edit'),
         ];
