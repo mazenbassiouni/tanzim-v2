@@ -18,13 +18,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\HtmlString;
 
 class MissionResource extends Resource
 {
     protected static ?string $model = Mission::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+
+    protected static ?int $navigationSort = 10;
     
     protected static ?string $navigationLabel = 'المتابعات';
 

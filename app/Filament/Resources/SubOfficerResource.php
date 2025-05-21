@@ -29,6 +29,8 @@ class SubOfficerResource extends Resource
 
     protected static ?string $navigationGroup = 'القوة';
 
+    protected static ?int $navigationSort = 20;
+
     protected static ?string $navigationLabel = 'ضباط الصف';
 
     protected static ?string $modelLabel = 'ضابط صف';

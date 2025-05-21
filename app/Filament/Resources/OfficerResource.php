@@ -28,6 +28,8 @@ class OfficerResource extends Resource
 
     protected static ?string $navigationGroup = 'القوة';
 
+    protected static ?int $navigationSort = 10;
+
     protected static ?string $navigationLabel = 'الضباط';
 
     protected static ?string $modelLabel = 'ضابط';

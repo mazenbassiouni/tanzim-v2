@@ -29,6 +29,8 @@ class SoliderResource extends Resource
 
     protected static ?string $navigationGroup = 'القوة';
 
+    protected static ?int $navigationSort = 30;
+
     protected static ?string $navigationLabel = 'الجنود';
 
     protected static ?string $modelLabel = 'جندى';
