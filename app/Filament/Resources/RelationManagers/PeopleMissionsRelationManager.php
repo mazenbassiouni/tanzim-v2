@@ -1,21 +1,25 @@
 <?php
 
-namespace App\Filament\Resources\CategoryResource\RelationManagers;
+namespace App\Filament\Resources\RelationManagers;
 
 use App\Filament\Resources\MissionResource;
-use App\Filament\Resources\RelationManagers\MissionsRelationManager as GenericMissionsRelationManager;
 use App\Models\Mission;
+use App\Models\Task;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Resources\Components\Tab;
 use Filament\Tables;
 
-class MissionsRelationManager extends GenericMissionsRelationManager
+class PeopleMissionsRelationManager extends MissionsRelationManager
 {
     public function table(Table $table): Table
     {
@@ -36,9 +40,6 @@ class MissionsRelationManager extends GenericMissionsRelationManager
                                     ->relationship('category', 'name')
                                     ->required()
                                     ->searchable()
-                                    ->afterStateHydrated(
-                                        fn (Set $set) => $set('category_id', $this->ownerRecord->id)
-                                    )
                                     ->live()
                                     ->preload(),
                                 DatePicker::make('started_at')
@@ -58,6 +59,9 @@ class MissionsRelationManager extends GenericMissionsRelationManager
                                     ->multiple()
                                     ->relationship('people', 'name', fn ($query) => $query->orderBy('rank_id'))
                                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->rank_name)
+                                    ->afterStateHydrated(
+                                        fn (Set $set) => $set('people', [$this->ownerRecord->id])
+                                    )
                                     ->columnSpanFull(),
                                 Textarea::make('desc')
                                     ->label('الموضوع')

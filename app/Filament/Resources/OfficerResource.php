@@ -4,8 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\OfficerResource\Pages;
 use App\Filament\Resources\OfficerResource\RelationManagers;
+use App\Filament\Resources\RelationManagers\PeopleMissionsRelationManager;
 use App\Models\Person;
-use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -20,7 +20,6 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OfficerResource extends Resource
 {
@@ -106,11 +105,11 @@ class OfficerResource extends Resource
                             ->live()
                             ->hidden(fn (Get $get) => $get('is_force')),
                     ]),
-                DatePicker::make('delete_date')
+                DatePicker::make('deleted_date')
                     ->label('تاريخ الشطب')
                     ->required(fn (Get $get) => !$get('is_force') && !$get('is_mission'))
                     ->hidden(fn (Get $get) => $get('is_force') || $get('is_mission')),
-                TextInput::make('delete_desc')
+                TextInput::make('deleted_desc')
                     ->label('ملاحظات الشطب')
                     ->required(fn (Get $get) => !$get('is_force') && !$get('is_mission'))
                     ->hidden(fn (Get $get) => $get('is_force') || $get('is_mission')),
@@ -186,7 +185,7 @@ class OfficerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PeopleMissionsRelationManager::class,
         ];
     }
 

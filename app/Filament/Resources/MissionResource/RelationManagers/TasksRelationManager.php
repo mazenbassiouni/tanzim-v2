@@ -46,6 +46,7 @@ class TasksRelationManager extends RelationManager
                     ->options([
                         'active' => 'جاري',
                         'pending' => 'معلق',
+                        'done' => 'منتهي',
                     ])
                     ->native(false)
                     ->live()
@@ -54,6 +55,10 @@ class TasksRelationManager extends RelationManager
                     ->label('تاريخ الاستحقاق')
                     ->required()
                     ->visible(fn (Get $get): bool => $get('status') === 'active'),
+                DatePicker::make('done_at')
+                    ->label('تاريخ الانتهاء')
+                    ->required()
+                    ->visible(fn (Get $get): bool => $get('status') === 'done'),
                 
             ]);
     }

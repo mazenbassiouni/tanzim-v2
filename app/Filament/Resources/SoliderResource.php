@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\RelationManagers\PeopleMissionsRelationManager;
 use App\Filament\Resources\SoliderResource\Pages;
 use App\Filament\Resources\SoliderResource\RelationManagers;
 use App\Models\Person;
@@ -110,11 +111,11 @@ class SoliderResource extends Resource
                             ->live()
                             ->hidden(fn (Get $get) => $get('is_force')),
                     ]),
-                DatePicker::make('delete_date')
+                DatePicker::make('deleted_date')
                     ->label('تاريخ الشطب')
                     ->required(fn (Get $get) => !$get('is_force') && !$get('is_mission'))
                     ->hidden(fn (Get $get) => $get('is_force') || $get('is_mission')),
-                TextInput::make('delete_desc')
+                TextInput::make('deleted_desc')
                     ->label('ملاحظات الشطب')
                     ->required(fn (Get $get) => !$get('is_force') && !$get('is_mission'))
                     ->hidden(fn (Get $get) => $get('is_force') || $get('is_mission')),
@@ -196,7 +197,7 @@ class SoliderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PeopleMissionsRelationManager::class,
         ];
     }
 

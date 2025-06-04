@@ -49,7 +49,11 @@ class ViewMission extends Component implements HasForms, HasInfolists
                                     ->weight(FontWeight::Bold),
                                 TextEntry::make('people.name')
                                     ->label('بخصوص')
-                                    ->formatStateUsing(fn (string $state): string => $this->mission->people->where('name', $state)->first()->rank_name)
+                                    ->html()
+                                    ->formatStateUsing(function (string $state): string {
+                                        $person = $this->mission->people->where('name', $state)->first();
+                                        return '<a href="'.$person->getViewLink().'" target="_blank">'.$person->rank_name.'</a>';
+                                    })
                                     ->listWithLineBreaks()
                                     ->limitList(3)
                                     ->expandableLimitedList()

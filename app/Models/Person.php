@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Filament\Resources\OfficerResource;
+use App\Filament\Resources\SoliderResource;
+use App\Filament\Resources\SubOfficerResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Person extends Model
 {
@@ -30,5 +34,21 @@ class Person extends Model
     public function getRankNameAttribute()
     {
         return $this->rank->name.'/ '.$this->name;
+    }
+    
+    public function missions(): BelongsToMany
+    {
+        return $this->belongsToMany(Mission::class);
+    }
+
+    public function getViewLink()
+    {
+        if ($this->rank_id <= 21) {
+            return OfficerResource::getUrl('view', ['record' => $this->id]);
+        } elseif ($this->rank_id <= 26) {
+            return SubOfficerResource::getUrl('view', ['record' => $this->id]);
+        } elseif ($this->rank_id == 27) {
+            return SoliderResource::getUrl('view', ['record' => $this->id]);
+        }
     }
 }

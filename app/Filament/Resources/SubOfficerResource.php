@@ -2,12 +2,10 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\RelationManagers\PeopleMissionsRelationManager;
 use App\Filament\Resources\SubOfficerResource\Pages;
 use App\Filament\Resources\SubOfficerResource\RelationManagers;
 use App\Models\Person;
-use App\Models\SubOfficer;
-use Faker\Provider\ar_EG\Text;
-use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -21,7 +19,6 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SubOfficerResource extends Resource
 {
@@ -102,11 +99,11 @@ class SubOfficerResource extends Resource
                     ->default(false)
                     ->live()
                     ->hidden(fn (Get $get) => $get('is_force')),
-                DatePicker::make('delete_date')
+                DatePicker::make('deleted_date')
                     ->label('تاريخ الشطب')
                     ->required(fn (Get $get) => !$get('is_force') && !$get('is_mission'))
                     ->hidden(fn (Get $get) => $get('is_force') || $get('is_mission')),
-                TextInput::make('delete_desc')
+                TextInput::make('deleted_desc')
                     ->label('ملاحظات الشطب')
                     ->required(fn (Get $get) => !$get('is_force') && !$get('is_mission'))
                     ->hidden(fn (Get $get) => $get('is_force') || $get('is_mission')),
@@ -188,7 +185,7 @@ class SubOfficerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            PeopleMissionsRelationManager::class,
         ];
     }
 
