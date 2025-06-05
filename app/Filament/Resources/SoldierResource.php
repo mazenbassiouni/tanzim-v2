@@ -3,10 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\RelationManagers\PeopleMissionsRelationManager;
-use App\Filament\Resources\SoliderResource\Pages;
-use App\Filament\Resources\SoliderResource\RelationManagers;
+use App\Filament\Resources\SoldierResource\Pages;
+use App\Filament\Resources\SoldierResource\RelationManagers;
 use App\Models\Person;
-use App\Models\Solider;
+use App\Models\Soldier;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -24,7 +24,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SoliderResource extends Resource
+class SoldierResource extends Resource
 {
     protected static ?string $model = Person::class;
 
@@ -210,10 +210,10 @@ class SoliderResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSoliders::route('/'),
-            'create' => Pages\CreateSolider::route('/create'),
-            'view' => Pages\ViewSolider::route('/{record}'),
-            'edit' => Pages\EditSolider::route('/{record}/edit'),
+            'index' => Pages\ListSoldiers::route('/'),
+            'create' => Pages\CreateSoldier::route('/create'),
+            'view' => Pages\ViewSoldier::route('/{record}'),
+            'edit' => Pages\EditSoldier::route('/{record}/edit'),
         ];
     }
 

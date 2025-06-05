@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\SoliderResource\Pages;
+namespace App\Filament\Resources\SoldierResource\Pages;
 
-use App\Filament\Resources\SoliderResource;
+use App\Filament\Resources\SoldierResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
-class ViewSolider extends ViewRecord
+class ViewSoldier extends ViewRecord
 {
-    protected static string $resource = SoliderResource::class;
+    protected static string $resource = SoldierResource::class;
 
     protected function getHeaderActions(): array
     {

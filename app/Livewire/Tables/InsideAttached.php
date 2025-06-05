@@ -3,6 +3,7 @@
 namespace App\Livewire\Tables;
 
 use App\Filament\Resources\MissionResource;
+use App\Models\Category;
 use App\Models\Person;
 use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -20,7 +21,7 @@ class InsideAttached extends Component implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
-    public $category_id = 20;
+    public $category_id = Category::INSIDE_ATTACHED;
 
     public function table(Table $table): Table
     {

@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\CategoryResource\RelationManagers;
 
+use App\Events\MissionCreated;
 use App\Filament\Resources\MissionResource;
 use App\Filament\Resources\RelationManagers\MissionsRelationManager as GenericMissionsRelationManager;
+use App\Models\Category;
 use App\Models\Mission;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -29,7 +31,7 @@ class MissionsRelationManager extends GenericMissionsRelationManager
                                     ->label('العنوان')
                                     ->required()
                                     ->columnSpanFull()
-                                    ->hidden(fn (Get $get): bool => $get('category_id') != 1)
+                                    ->hidden(fn (Get $get): bool => $get('category_id') != Category::GENERAL)
                                     ->maxLength(255),
                                 Select::make('category_id')
                                     ->label('النوع')
@@ -66,13 +68,8 @@ class MissionsRelationManager extends GenericMissionsRelationManager
                             ]),
                     ])
                     ->after(function (Mission $record) {
-                        $record->category->tasks->each(function ($task) use ($record) {
-                            $record->tasks()->create([
-                                'title' => $task->title,
-                                'desc' => $task->desc,
-                                'status' => $task->status,
-                            ]);
-                        });
+                        MissionCreated::dispatch($record);
+
                         redirect()->to(MissionResource::getUrl('edit', ['record' => $record->id]));
                     }),
             ]);

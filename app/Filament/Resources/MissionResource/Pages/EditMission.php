@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\MissionResource\Pages;
 
 use App\Filament\Resources\MissionResource;
+use App\Models\Category;
 use App\Models\Person;
 use Filament\Actions;
 use Filament\Forms\Components\DatePicker;
@@ -23,11 +24,11 @@ class EditMission extends EditRecord
     {
         return [
             Actions\ViewAction::make(),
-            Actions\Action::make('syncSolider')
+            Actions\Action::make('syncSoldier')
                 ->label('تحديث الجنود')
                 ->action(function () {
-                    $soliders = Person::soliders()->force()->where('lay_off_date', $this->record->started_at)->pluck('id');
-                    $this->record->people()->sync($soliders);
+                    $soldiers = Person::soldiers()->force()->where('lay_off_date', $this->record->started_at)->pluck('id');
+                    $this->record->people()->sync($soldiers);
                     
                     $this->fillForm();
 
@@ -38,7 +39,7 @@ class EditMission extends EditRecord
                 })
                 ->icon('heroicon-o-arrow-path')
                 ->color('success')
-                ->hidden(fn () => $this->record->category_id != 62),
+                ->hidden(fn () => $this->record->category_id != Category::SOLDIER_BATCH_LAYOFF),
             Actions\Action::make('layoff')
                 ->label('تسريح الدفعة')
                 ->requiresConfirmation()
@@ -56,7 +57,7 @@ class EditMission extends EditRecord
                 })
                 ->icon('heroicon-o-x-circle')
                 ->color('warning')
-                ->hidden(fn () => $this->record->category_id != 62),
+                ->hidden(fn () => $this->record->category_id != Category::SOLDIER_BATCH_LAYOFF),
             Actions\DeleteAction::make(),
         ];
     }
@@ -69,7 +70,7 @@ class EditMission extends EditRecord
                     ->label('العنوان')
                     ->required()
                     ->columnSpanFull()
-                    ->hidden(fn (Get $get): bool => $get('category_id') != 1)
+                    ->hidden(fn (Get $get): bool => $get('category_id') != Category::GENERAL)
                     ->maxLength(255),
                 Select::make('category_id')
                     ->label('النوع')
@@ -79,7 +80,7 @@ class EditMission extends EditRecord
                     ->live()
                     ->preload(),
                 DatePicker::make('started_at')
-                    ->label(fn () => $this->record->category_id != 62 ? 'تاريخ البدء' : 'تاريخ التسريح')
+                    ->label(fn (Get $get) => $this->record::startedAtLabel($get('category_id')))
                     ->required(),
                 Select::make('people')
                     ->label(function (Get $get) {

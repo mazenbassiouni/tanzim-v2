@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Filament\Resources\OfficerResource;
-use App\Filament\Resources\SoliderResource;
+use App\Filament\Resources\SoldierResource;
 use App\Filament\Resources\SubOfficerResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -67,7 +67,7 @@ class Person extends Model
         $query->whereBetween('rank_id', [22, 26]);
     }
     
-    public function scopeSoliders(Builder $query): void
+    public function scopeSoldiers(Builder $query): void
     {
         $query->where('rank_id', 27);
     }
@@ -79,7 +79,7 @@ class Person extends Model
         } elseif ($this->rank_id <= 26) {
             return SubOfficerResource::getUrl('view', ['record' => $this->id]);
         } elseif ($this->rank_id == 27) {
-            return SoliderResource::getUrl('view', ['record' => $this->id]);
+            return SoldierResource::getUrl('view', ['record' => $this->id]);
         }
     }
 }

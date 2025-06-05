@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\RelationManagers;
 
+use App\Events\MissionCreated;
 use App\Filament\Resources\MissionResource;
+use App\Models\Category;
 use App\Models\Mission;
 use App\Models\Task;
 use Filament\Forms\Components\DatePicker;
@@ -33,7 +35,7 @@ class PeopleMissionsRelationManager extends MissionsRelationManager
                                     ->label('العنوان')
                                     ->required()
                                     ->columnSpanFull()
-                                    ->hidden(fn (Get $get): bool => $get('category_id') != 1)
+                                    ->hidden(fn (Get $get): bool => $get('category_id') != Category::GENERAL)
                                     ->maxLength(255),
                                 Select::make('category_id')
                                     ->label('النوع')
@@ -44,6 +46,7 @@ class PeopleMissionsRelationManager extends MissionsRelationManager
                                     ->preload(),
                                 DatePicker::make('started_at')
                                     ->label('تاريخ البدء')
+                                    ->label(fn (Get $get) => Mission::startedAtLabel($get('category_id')))
                                     ->required()
                                     ->placeholder('اختر تاريخ البدء'),
                                 Select::make('people')
@@ -70,15 +73,13 @@ class PeopleMissionsRelationManager extends MissionsRelationManager
                             ]),
                     ])
                     ->after(function (Mission $record) {
-                        $record->category->tasks->each(function ($task) use ($record) {
-                            $record->tasks()->create([
-                                'title' => $task->title,
-                                'desc' => $task->desc,
-                                'status' => $task->status,
-                            ]);
-                        });
+                        MissionCreated::dispatch($record);
+                        
                         redirect()->to(MissionResource::getUrl('edit', ['record' => $record->id]));
                     }),
             ]);
+            // ->actions([
+            //     Tables\Actions\EditAction::make(),
+            // ]);
     }
 }

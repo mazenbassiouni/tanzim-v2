@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\MissionResource\Pages;
 use App\Filament\Resources\MissionResource\RelationManagers;
+use App\Models\Category;
 use App\Models\Mission;
 use App\Models\Task;
 use Filament\Actions\Action;
@@ -46,7 +47,7 @@ class MissionResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('category.name')
-                    ->formatStateUsing(fn (Model $record, string $state): string => $record->category->id != 1 ? $state : $record->title)
+                    ->formatStateUsing(fn (Model $record, string $state): string => $record->category->id != Category::GENERAL ? $state : $record->title)
                     ->label('النوع')
                     ->tooltip(fn (Model $record): string => $record->desc ?? ''),
                 TextColumn::make('people.name')
@@ -93,6 +94,7 @@ class MissionResource extends Resource
                             ->openUrlInNewTab(),
                     ]),
                     Tables\Actions\EditAction::make()
+                        ->url(fn (Model $record): string => MissionResource::getUrl(name: 'edit', parameters: ['record' => $record]))
                         ->iconButton(),
             ])
             ->recordUrl(

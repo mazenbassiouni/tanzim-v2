@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\MissionResource\Pages;
 
+use App\Events\MissionCreated;
 use App\Filament\Resources\MissionResource;
+use App\Models\Category;
 use App\Models\Mission;
 use App\Models\Task;
 use Filament\Actions;
@@ -31,7 +33,7 @@ class ListMissions extends ListRecords
                                 ->label('العنوان')
                                 ->required()
                                 ->columnSpanFull()
-                                ->hidden(fn (Get $get): bool => $get('category_id') != 1)
+                                ->hidden(fn (Get $get): bool => $get('category_id') != Category::GENERAL)
                                 ->maxLength(255),
                             Select::make('category_id')
                                 ->label('النوع')
@@ -41,7 +43,9 @@ class ListMissions extends ListRecords
                                 ->live()
                                 ->preload(),
                             DatePicker::make('started_at')
-                                ->label('تاريخ البدء')
+                                ->label(function (Get $get) {
+                                    return Mission::startedAtLabel($get('category_id'));
+                                })
                                 ->required()
                                 ->placeholder('اختر تاريخ البدء'),
                             Select::make('people')
@@ -65,13 +69,8 @@ class ListMissions extends ListRecords
                         ]),
                 ])
                 ->after(function (Mission $record) {
-                    $record->category->tasks->each(function ($task) use ($record) {
-                        $record->tasks()->create([
-                            'title' => $task->title,
-                            'desc' => $task->desc,
-                            'status' => $task->status,
-                        ]);
-                    });
+                    MissionCreated::dispatch($record);
+                    
                     redirect()->to(MissionResource::getUrl('edit', ['record' => $record->id]));
                 }),
         ];
@@ -79,40 +78,30 @@ class ListMissions extends ListRecords
 
     public function getTabs(): array
     {
-        $active_count = Mission::whereRelation('tasks', 'status', 'active')
-                            ->count();
-        $pending_count = Mission::whereRelation('tasks', 'status', 'pending')
-                            ->whereDoesntHave('tasks', function (Builder $query) {
-                                $query->where('status', 'active');
-                            })->count();
+        $active_count = Mission::active()->count();
+        $pending_count = Mission::pending()->count();
         return [
             'done' => Tab::make('done')
                 ->label('منتهية')
                 ->modifyQueryUsing( function(Builder $query) {
-                    $query->whereDoesntHave('tasks', function (Builder $query) {
-                        $query->where('status', 'pending')
-                            ->orWhere('status', 'active');
-                    })
-                    ->orderBy(
-                        Task::select('done_at')
-                            ->whereColumn('missions.id', 'tasks.mission_id')
-                            ->where('status', 'done')
-                            ->orderBy('done_at', 'desc')
-                            ->limit(1), 'desc'
-                    );
+                    $query->done()
+                        ->orderBy(
+                            Task::select('done_at')
+                                ->whereColumn('missions.id', 'tasks.mission_id')
+                                ->where('status', 'done')
+                                ->orderBy('done_at', 'desc')
+                                ->limit(1), 'desc'
+                        );
                 }),
             'pending' => Tab::make('pending')
                 ->label('معلقة'.' ('.$pending_count.')')
                 ->modifyQueryUsing( function(Builder $query) {
-                        $query->whereRelation('tasks', 'status', 'pending')
-                        ->whereDoesntHave('tasks', function (Builder $query) {
-                            $query->where('status', 'active');
-                        });
+                        $query->pending();
                 }),
             'active' => Tab::make('active')
                 ->label('جارية'.' ('.$active_count.')')
                 ->modifyQueryUsing( function(Builder $query) {
-                        $query->whereRelation('tasks', 'status', 'active')
+                        $query->active()
                             ->orderBy(
                                 Task::select('due_to')
                                     ->whereColumn('tasks.mission_id', 'missions.id')

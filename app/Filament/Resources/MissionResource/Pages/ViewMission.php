@@ -29,7 +29,7 @@ class ViewMission extends ViewRecord
                     ->label('العنوان')
                     ->color('primary')
                     ->weight(FontWeight::Bold)
-                    ->formatStateUsing(fn (string $state): string => $this->record->category->id != 1 ? $state : $this->record->title),
+                    ->formatStateUsing(fn (string $state): string => $this->record->display_title),
                 TextEntry::make('started_at')
                     ->label('تاريخ البدء')
                     ->date('l d/m/Y')
