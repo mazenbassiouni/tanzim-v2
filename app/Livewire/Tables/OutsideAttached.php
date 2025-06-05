@@ -62,14 +62,14 @@ class OutsideAttached extends Component implements HasForms, HasTable
                     ->extraModalFooterActions([
                         Action::make('edit')
                             ->label('تعديل')
-                            ->url(fn (Person $record): string => MissionResource::getUrl('custom-edit', ['record' => $record->missions->first()]))
+                            ->url(fn (Person $record): string => MissionResource::getUrl('edit', ['record' => $record->missions->first()]))
                             ->openUrlInNewTab(),
                     ]),
-                Tables\Actions\Action::make('custom-edit')
+                Tables\Actions\Action::make('edit')
                     ->iconButton()
                     ->label('تعديل')
                     ->icon('heroicon-s-pencil-square')
-                    ->url(fn (Person $record): string => MissionResource::getUrl('custom-edit', ['record' => $record->missions->first()]))
+                    ->url(fn (Person $record): string => MissionResource::getUrl('edit', ['record' => $record->missions->first()]))
                     ->openUrlInNewTab(),
             ])
             ->paginated(false)

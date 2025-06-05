@@ -74,29 +74,36 @@ class MissionResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
+                Tables\Actions\Action::make('custom-view')
+                    ->label('عرض')
                     ->iconButton()
+                    ->icon('heroicon-s-eye')
+                    ->color('gray')
                     ->modalContent(fn (Model $record): View => view('filament.infolists.components.view-mission', [
                         'mission' => $record
                     ]))
-                    ->extraModalFooterActions([
+                    ->modalFooterActions([
+                        Action::make('close')
+                            ->close()
+                            ->label('إغلاق')
+                            ->color('gray'),
                         Action::make('edit')
                             ->label('تعديل')
-                            ->url(fn (Model $record): string => MissionResource::getUrl('custom-edit', ['record' => $record]))
+                            ->url(fn (Model $record): string => MissionResource::getUrl('edit', ['record' => $record]))
                             ->openUrlInNewTab(),
                     ]),
-                Tables\Actions\Action::make('custom-edit')
-                    ->iconButton()
-                    ->label('تعديل')
-                    ->icon('heroicon-s-pencil-square')
-                    ->url(fn (Model $record): string => MissionResource::getUrl('custom-edit', ['record' => $record]))
-                    ->openUrlInNewTab(),
+                    Tables\Actions\EditAction::make()
+                        ->iconButton(),
             ])
+            ->recordUrl(
+                fn (Model $record): string => static::getUrl(name: 'view', parameters: ['record' => $record])
+            )
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->emptyStateHeading('لا توجد متابعات');
     }
 
     public static function getRelations(): array
@@ -111,8 +118,8 @@ class MissionResource extends Resource
         return [
             'index' => Pages\ListMissions::route('/'),
             // 'create' => Pages\CreateMission::route('/create'),
-            // 'view' => Pages\ViewMission::route('/{record}'),
-            'custom-edit' => Pages\EditMission::route('/{record}/edit'),
+            'view' => Pages\ViewMission::route('/{record}'),
+            'edit' => Pages\EditMission::route('/{record}/edit'),
         ];
     }
 }

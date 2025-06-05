@@ -73,7 +73,7 @@ class MissionsRelationManager extends GenericMissionsRelationManager
                                 'status' => $task->status,
                             ]);
                         });
-                        redirect()->to(MissionResource::getUrl('custom-edit', ['record' => $record->id]));
+                        redirect()->to(MissionResource::getUrl('edit', ['record' => $record->id]));
                     }),
             ]);
     }

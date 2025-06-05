@@ -8,6 +8,7 @@ use App\Filament\Resources\SubOfficerResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class Person extends Model
 {
@@ -39,6 +40,26 @@ class Person extends Model
     public function missions(): BelongsToMany
     {
         return $this->belongsToMany(Mission::class);
+    }
+
+    public function scopeForce(Builder $query): void
+    {
+        $query->where('is_force', 1);
+    }
+
+    public function scopeOfficers(Builder $query): void
+    {
+        $query->where('rank_id', '<=', 21);
+    }
+
+    public function scopeSubOfficers(Builder $query): void
+    {
+        $query->whereBetween('rank_id', [22, 26]);
+    }
+    
+    public function scopeSoliders(Builder $query): void
+    {
+        $query->where('rank_id', 27);
     }
 
     public function getViewLink()

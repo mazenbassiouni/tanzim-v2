@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\MissionResource\Pages;
 
 use App\Filament\Resources\MissionResource;
+use App\Models\Person;
 use Filament\Actions;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -10,6 +11,8 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 
 class EditMission extends EditRecord
@@ -19,7 +22,41 @@ class EditMission extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            // Actions\ViewAction::make(),
+            Actions\ViewAction::make(),
+            Actions\Action::make('syncSolider')
+                ->label('تحديث الجنود')
+                ->action(function () {
+                    $soliders = Person::soliders()->force()->where('lay_off_date', $this->record->started_at)->pluck('id');
+                    $this->record->people()->sync($soliders);
+                    
+                    $this->fillForm();
+
+                    Notification::make()
+                        ->title('تم تحديث الجنود')
+                        ->success()
+                        ->send();
+                })
+                ->icon('heroicon-o-arrow-path')
+                ->color('success')
+                ->hidden(fn () => $this->record->category_id != 62),
+            Actions\Action::make('layoff')
+                ->label('تسريح الدفعة')
+                ->requiresConfirmation()
+                ->action(function () {
+                    $this->record->people()->update([
+                        'is_force' => false,
+                        'deleted_date' => $this->record->started_at,
+                        'deleted_desc' => 'رديف '.$this->record->started_at->format('d/m/Y'),
+                    ]);
+
+                    Notification::make()
+                        ->title('تم تسريح الدفعة بنجاح')
+                        ->success()
+                        ->send();
+                })
+                ->icon('heroicon-o-x-circle')
+                ->color('warning')
+                ->hidden(fn () => $this->record->category_id != 62),
             Actions\DeleteAction::make(),
         ];
     }
@@ -42,9 +79,8 @@ class EditMission extends EditRecord
                     ->live()
                     ->preload(),
                 DatePicker::make('started_at')
-                    ->label('تاريخ البدء')
-                    ->required()
-                    ->placeholder('اختر تاريخ البدء'),
+                    ->label(fn () => $this->record->category_id != 62 ? 'تاريخ البدء' : 'تاريخ التسريح')
+                    ->required(),
                 Select::make('people')
                     ->label(function (Get $get) {
                         $label = 'بخصوص';

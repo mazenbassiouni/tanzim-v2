@@ -137,7 +137,7 @@ class SoliderResource extends Resource
                     ->searchable(),
                 TextColumn::make('lay_off_date')
                     ->label('تاريخ التسريح')
-                    ->date('Y-m-d')
+                    ->date('d-m-Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('milUnit.name')

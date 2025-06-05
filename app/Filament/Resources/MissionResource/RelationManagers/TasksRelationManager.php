@@ -70,7 +70,7 @@ class TasksRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('title')
                     ->tooltip(fn ($record): string => $record->desc ?? '')
-                    ->label(''),
+                    ->label('العنوان'),
                 TextColumn::make('id')
                     ->label('')
                     ->formatStateUsing(function (Task $record) {
