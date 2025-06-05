@@ -44,7 +44,17 @@ class Person extends Model
 
     public function scopeForce(Builder $query): void
     {
-        $query->where('is_force', 1);
+        $query->where('is_force', true);
+    }
+
+    public function scopeNotForce(Builder $query): void
+    {
+        $query->where('is_force', false);
+    }
+
+    public function scopeMission(Builder $query): void
+    {
+        $query->where('is_mission', false);
     }
 
     public function scopeOfficers(Builder $query): void

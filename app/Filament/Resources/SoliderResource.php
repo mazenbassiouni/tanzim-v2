@@ -151,7 +151,13 @@ class SoliderResource extends Resource
                 TextColumn::make('speciality.category.name')
                     ->label('الفئة')
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('created_at')
+                    ->label('تاريخ الانشاء')
+                    ->date('d-m-Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('lay_off_date', 'asc')
             ->filters([
                 TernaryFilter::make('is_force')
                     ->label('قوة')
