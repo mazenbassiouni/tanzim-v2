@@ -139,7 +139,7 @@ class SoldierResource extends Resource
                     ->label('تاريخ التسريح')
                     ->date('d-m-Y')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
                 TextColumn::make('milUnit.name')
                     ->label('التسكين')
                     ->toggleable(isToggledHiddenByDefault: true),
