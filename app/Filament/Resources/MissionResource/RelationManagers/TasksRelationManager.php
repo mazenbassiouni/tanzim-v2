@@ -134,4 +134,9 @@ class TasksRelationManager extends RelationManager
             ])
             ->defaultPaginationPageOption('all');
     }
+
+    public function isReadOnly(): bool
+    {
+        return false;
+    }
 }

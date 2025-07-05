@@ -26,7 +26,7 @@ class SendMissionNotification
     {
         $mission = $event->mission;
 
-        if( in_array($mission->category_id, Category::PROMOTION_AND_RENEWAL_EEFFETS) ){
+        if( in_array($mission->category_id, Category::PROMOTION_AND_RENEWAL_EFFECTS) ){
 
             $people = $mission->people()->whereHas('missions', function ($query) {
                 $query->where('category_id', Category::PROMOTION_AND_RENEWAL)

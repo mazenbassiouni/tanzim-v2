@@ -5,9 +5,17 @@ namespace App\Filament\Widgets;
 use App\Models\Person;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\Auth;
 
 class ForceOverview extends BaseWidget
 {
+
+    protected static ?string $permission = 'widget_ForceOverview';
+
+    public static function canView(): bool
+    {
+        return Auth::user()->can(static::$permission);
+    }
 
     protected function getColumns(): int
     {
@@ -42,11 +50,12 @@ class ForceOverview extends BaseWidget
                                 })->count();
 
         return [
-            Stat::make('القوة', $officers + $subOfficers + $soldiers),
+            // Stat::make('القوة', $officers + $subOfficers + $soldiers),
             Stat::make('ضباط', $officers)
                 ->description($extraOfficers)
                 ->descriptionIcon('heroicon-m-plus')
                 ->color('success'),
+            Stat::make('الافراد', $subOfficers + $soldiers),
             Stat::make('ضباط صف', $subOfficers)
                 ->description($extraSubOfficers)
                 ->descriptionIcon('heroicon-m-plus')

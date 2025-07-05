@@ -23,7 +23,7 @@ class Category extends Model
     const SOLDIER_BATCH_LAYOFF = 62;
 
 
-    const PROMOTION_AND_RENEWAL_EEFFETS = [
+    const PROMOTION_AND_RENEWAL_EFFECTS = [
         self::pathological_COUNCIL,
         self::TRIAL,
         self::CASE_UNDER_INVESTIGATION,

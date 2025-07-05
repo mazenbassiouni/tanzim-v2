@@ -124,6 +124,11 @@ class OfficerResource extends Resource
                     ->label('الرقم العسكرى')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('seniority_num')
+                    ->label('رقم الاقدمية')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(true),
                 TextColumn::make('rank.name')
                     ->label('الرتبة')
                     ->searchable(),
