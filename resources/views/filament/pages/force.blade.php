@@ -154,7 +154,7 @@
     
             <x-filament::tabs.item alpine-active="activeTab === 'insideMissions'" x-on:click="activeTab = 'insideMissions'">
                 مأمورية عمل طرفنا
-                <x-slot name="badge">{{ $this->peopleQuery(60)->count() }}</x-slot>
+                <x-slot name="badge">{{ $this->peopleQuery(60, false)->count() }}</x-slot>
             </x-filament::tabs.item>
     
             <x-filament::tabs.item alpine-active="activeTab === 'insideAttached'" x-on:click="activeTab = 'insideAttached'">

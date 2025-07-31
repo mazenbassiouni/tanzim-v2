@@ -31,9 +31,9 @@ class Force extends Page
         ];
     }
 
-    public function peopleQuery(int $category_id)
+    public function peopleQuery(int $category_id, bool $is_force = true)
     {
-        return Person::where('is_force', 1)->whereHas('missions', function ($query) use ($category_id) {
+        return Person::where('is_force', $is_force)->whereHas('missions', function ($query) use ($category_id) {
                 $query->where('category_id', $category_id)
                     ->whereHas('tasks', function ($query){
                         $query->where('status', '<>', 'done');

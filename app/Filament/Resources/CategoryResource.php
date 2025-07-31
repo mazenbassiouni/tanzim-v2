@@ -50,7 +50,7 @@ class CategoryResource extends Resource
                             ->required()
                             ->numeric()
                             ->label('الترتيب'),
-                        TextInput::make('description')
+                        TextInput::make('desc')
                             ->label('الوصف')
                             ->columnSpanFull(),
                     ])

@@ -25,7 +25,7 @@ class InsideAttached extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
-        $query = Person::where('is_force', 1)->whereHas('missions', function ($query) {
+        $query = Person::where('is_force', 0)->whereHas('missions', function ($query) {
                 $query->where('category_id', $this->category_id)
                     ->whereHas('tasks', function ($query){
                         $query->where('status', '<>', 'done');
