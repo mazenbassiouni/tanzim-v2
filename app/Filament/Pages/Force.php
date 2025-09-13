@@ -26,8 +26,6 @@ class Force extends Page
 
     public array $tamam;
 
-    public int $category_id = 59;
-
     protected function getHeaderWidgets(): array
     {
         return [
