@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\RelationManagers\PeopleMissionsRelationManager;
 use App\Filament\Resources\SubOfficerResource\Pages;
 use App\Filament\Resources\SubOfficerResource\RelationManagers;
-use App\Models\Person;
+use App\Models\SubOfficer;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class SubOfficerResource extends Resource
 {
-    protected static ?string $model = Person::class;
+    protected static ?string $model = SubOfficer::class;
 
     protected static ?string $navigationGroup = 'القوة';
 
@@ -203,6 +203,6 @@ class SubOfficerResource extends Resource
     {
         return parent::getEloquentQuery()
                 ->with('rank', 'speciality.category', 'milUnit', 'unit')
-                ->whereBetween('rank_id', [22, 26])->orderBy('rank_id')->orderBy('military_num');
+                ->orderBy('rank_id')->orderBy('military_num');
     }
 }

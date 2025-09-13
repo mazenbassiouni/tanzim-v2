@@ -159,7 +159,7 @@
     
             <x-filament::tabs.item alpine-active="activeTab === 'insideAttached'" x-on:click="activeTab = 'insideAttached'">
                 إلحاق على الوحدة
-                <x-slot name="badge">{{ $this->peopleQuery(20)->count() }}</x-slot>
+                <x-slot name="badge">{{ $this->peopleQuery(20, false)->count() }}</x-slot>
             </x-filament::tabs.item>
         </x-filament::tabs>
     

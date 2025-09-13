@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\RelationManagers\PeopleMissionsRelationManager;
 use App\Filament\Resources\SoldierResource\Pages;
 use App\Filament\Resources\SoldierResource\RelationManagers;
-use App\Models\Person;
 use App\Models\Soldier;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -26,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SoldierResource extends Resource
 {
-    protected static ?string $model = Person::class;
+    protected static ?string $model = Soldier::class;
 
     protected static ?string $navigationGroup = 'القوة';
 
@@ -220,7 +219,6 @@ class SoldierResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-                ->with('rank', 'speciality.category', 'milUnit', 'unit')
-                ->where('rank_id',27);
+                ->with('rank', 'speciality.category', 'milUnit', 'unit');
     }
 }

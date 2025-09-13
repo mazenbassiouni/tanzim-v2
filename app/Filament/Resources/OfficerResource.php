@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OfficerResource\Pages;
 use App\Filament\Resources\OfficerResource\RelationManagers;
 use App\Filament\Resources\RelationManagers\PeopleMissionsRelationManager;
-use App\Models\Person;
+use App\Models\Officer;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class OfficerResource extends Resource
 {
-    protected static ?string $model = Person::class;
+    protected static ?string $model = Officer::class;
 
     protected static ?string $navigationGroup = 'القوة';
 
@@ -208,6 +208,6 @@ class OfficerResource extends Resource
     {
         return parent::getEloquentQuery()
                 ->with('rank', 'speciality.category', 'milUnit', 'unit')
-                ->where('is_force', true)->where('rank_id', '<=', 21)->orderBy('rank_id');
+                ->orderBy('rank_id');
     }
 }

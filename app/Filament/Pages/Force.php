@@ -2,7 +2,11 @@
 
 namespace App\Filament\Pages;
 use App\Filament\Widgets\ForceOverview;
+use App\Models\Officer;
 use App\Models\Person;
+use App\Models\Soldier;
+use App\Models\SubOfficer;
+use App\Models\Unit;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Pages\Page;
 
@@ -54,39 +58,39 @@ class Force extends Page
     {
         $this->tamam = $tamam = [
             'قيادة اللواء' => [
-                'officers' => Person::where('unit_id', 1)->where('rank_id','<=', 21)->whereIsMission(false)->whereIsForce(true)->count(),
-                'subOfficers' => Person::where('unit_id', 1)->where('rank_id','>', 21)->where('rank_id','<>', 27)->whereIsMission(false)->whereIsForce(true)->count(),
-                'soldiers' => Person::where('unit_id', 1)->where('rank_id','=', 27)->whereIsMission(false)->whereIsForce(true)->count()
+                'officers' => Officer::whereIn('unit_id', Unit::KYADA)->force()->count(),
+                'subOfficers' => SubOfficer::whereIn('unit_id', Unit::KYADA)->force()->count(),
+                'soldiers' => Soldier::whereIn('unit_id', Unit::KYADA)->force()->count()
             ],
             'مجموعة 24 صيني' => [
-                'officers' => Person::whereIn('unit_id', [15])->where('rank_id','<=', 21)->whereIsMission(false)->whereIsForce(true)->count(),
-                'subOfficers' => Person::whereIn('unit_id', [15])->where('rank_id','>', 21)->where('rank_id','<>', 27)->whereIsMission(false)->whereIsForce(true)->count(),
-                'soldiers' => Person::whereIn('unit_id', [15])->where('rank_id','=', 27)->whereIsMission(false)->whereIsForce(true)->count()
+                'officers' => Officer::whereIn('unit_id', Unit::MAG_24_SINI)->force()->count(),
+                'subOfficers' => SubOfficer::whereIn('unit_id', Unit::MAG_24_SINI)->force()->count(),
+                'soldiers' => Soldier::whereIn('unit_id', Unit::MAG_24_SINI)->force()->count()
             ],
             'مجموعة 205' => [
-                'officers' => Person::whereIn('unit_id', [7,8,9,10,11,12,13,14])->where('rank_id','<=', 21)->whereIsMission(false)->whereIsForce(true)->count(),
-                'subOfficers' => Person::whereIn('unit_id', [7,8,9,10,11,12,13,14])->where('rank_id','>', 21)->where('rank_id','<>', 27)->whereIsMission(false)->whereIsForce(true)->count(),
-                'soldiers' => Person::whereIn('unit_id', [7,8,9,10,11,12,13,14])->where('rank_id','=', 27)->whereIsMission(false)->whereIsForce(true)->count()
+                'officers' => Officer::whereIn('unit_id', Unit::MAG_205)->force()->count(),
+                'subOfficers' => SubOfficer::whereIn('unit_id', Unit::MAG_205)->force()->count(),
+                'soldiers' => Soldier::whereIn('unit_id', Unit::MAG_205)->force()->count()
             ],
             'مجموعة رمضان' => [
-                'officers' => Person::whereIn('unit_id', [16,17,18,19,20,21,22])->where('rank_id','<=', 21)->whereIsMission(false)->whereIsForce(true)->count(),
-                'subOfficers' => Person::whereIn('unit_id', [16,17,18,19,20,21,22])->where('rank_id','>', 21)->where('rank_id','<>', 27)->whereIsMission(false)->whereIsForce(true)->count(),
-                'soldiers' => Person::whereIn('unit_id', [16,17,18,19,20,21,22])->where('rank_id','=', 27)->whereIsMission(false)->whereIsForce(true)->count()
+                'officers' => Officer::whereIn('unit_id', Unit::MAG_RAMADAN)->force()->count(),
+                'subOfficers' => SubOfficer::whereIn('unit_id', Unit::MAG_RAMADAN)->force()->count(),
+                'soldiers' => Soldier::whereIn('unit_id', Unit::MAG_RAMADAN)->force()->count()
             ],
             'مجموعة سليمان عزت' => [
-                'officers' => Person::whereIn('unit_id', [2,3,4,5,6])->where('rank_id','<=', 21)->whereIsMission(false)->whereIsForce(true)->count(),
-                'subOfficers' => Person::whereIn('unit_id', [2,3,4,5,6])->where('rank_id','>', 21)->where('rank_id','<>', 27)->whereIsMission(false)->whereIsForce(true)->count(),
-                'soldiers' => Person::whereIn('unit_id', [2,3,4,5,6])->where('rank_id','=', 27)->whereIsMission(false)->whereIsForce(true)->count()
+                'officers' => Officer::whereIn('unit_id', Unit::MAG_FMC)->force()->count(),
+                'subOfficers' => SubOfficer::whereIn('unit_id', Unit::MAG_FMC)->force()->count(),
+                'soldiers' => Soldier::whereIn('unit_id', Unit::MAG_FMC)->force()->count()
             ],
             'القاعدة الإدارية' => [
-                'officers' => Person::where('unit_id', 27)->where('rank_id','<=', 21)->whereIsMission(false)->whereIsForce(true)->count(),
-                'subOfficers' => Person::where('unit_id', 27)->where('rank_id','>', 21)->where('rank_id','<>', 27)->whereIsMission(false)->whereIsForce(true)->count(),
-                'soldiers' => Person::where('unit_id', 27)->where('rank_id','=', 27)->whereIsMission(false)->whereIsForce(true)->count()
+                'officers' => Officer::whereIn('unit_id', Unit::KA3DA)->force()->count(),
+                'subOfficers' => SubOfficer::whereIn('unit_id', Unit::KA3DA)->force()->count(),
+                'soldiers' => Soldier::whereIn('unit_id', Unit::KA3DA)->force()->count()
             ],
             'إجمالي اللواء' =>[
-                'officers' => Person::where('rank_id','<=', 21)->whereIsMission(false)->whereIsForce(true)->count(),
-                'subOfficers' => Person::where('rank_id','>', 21)->where('rank_id','<>', 27)->whereIsMission(false)->whereIsForce(true)->count(),
-                'soldiers' => Person::where('rank_id','=', 27)->whereIsMission(false)->whereIsForce(true)->count(),
+                'officers' => Officer::force()->count(),
+                'subOfficers' => SubOfficer::force()->count(),
+                'soldiers' => Soldier::force()->count(),
             ],
         ];
     }

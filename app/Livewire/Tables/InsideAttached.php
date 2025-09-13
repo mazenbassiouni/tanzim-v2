@@ -25,7 +25,7 @@ class InsideAttached extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
-        $query = Person::where('is_force', 0)->whereHas('missions', function ($query) {
+        $query = Person::force()->whereHas('missions', function ($query) {
                 $query->where('category_id', $this->category_id)
                     ->whereHas('tasks', function ($query){
                         $query->where('status', '<>', 'done');
@@ -57,6 +57,7 @@ class InsideAttached extends Component implements HasForms, HasTable
             ->actions([
                  Tables\Actions\ViewAction::make()
                     ->iconButton()
+                    ->modalHeading('عرض التفاصيل')
                     ->modalContent(fn (Person $record): View => view('filament.infolists.components.view-mission', [
                         'mission' => $record->missions->first()
                     ]))

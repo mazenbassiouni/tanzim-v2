@@ -39,7 +39,7 @@ class Person extends Model
     
     public function missions(): BelongsToMany
     {
-        return $this->belongsToMany(Mission::class);
+        return $this->belongsToMany(Mission::class, 'mission_person', 'person_id', 'mission_id');
     }
 
     public function scopeForce(Builder $query): void
@@ -55,21 +55,6 @@ class Person extends Model
     public function scopeMission(Builder $query): void
     {
         $query->where('is_mission', false);
-    }
-
-    public function scopeOfficers(Builder $query): void
-    {
-        $query->where('rank_id', '<=', 21);
-    }
-
-    public function scopeSubOfficers(Builder $query): void
-    {
-        $query->whereBetween('rank_id', [22, 26]);
-    }
-    
-    public function scopeSoldiers(Builder $query): void
-    {
-        $query->where('rank_id', 27);
     }
 
     public function getViewLink()

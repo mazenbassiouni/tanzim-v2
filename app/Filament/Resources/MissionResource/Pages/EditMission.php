@@ -5,6 +5,7 @@ namespace App\Filament\Resources\MissionResource\Pages;
 use App\Filament\Resources\MissionResource;
 use App\Models\Category;
 use App\Models\Person;
+use App\Models\Soldier;
 use Filament\Actions;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -27,7 +28,7 @@ class EditMission extends EditRecord
             Actions\Action::make('syncSoldier')
                 ->label('تحديث الجنود')
                 ->action(function () {
-                    $soldiers = Person::soldiers()->force()->where('lay_off_date', $this->record->started_at)->pluck('id');
+                    $soldiers = Soldier::force()->where('lay_off_date', $this->record->started_at)->pluck('id');
                     $this->record->people()->sync($soldiers);
                     
                     $this->fillForm();
