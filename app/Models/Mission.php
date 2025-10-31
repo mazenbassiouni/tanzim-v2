@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\MissionsOfficeScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[ScopedBy([MissionsOfficeScope::class])]
 class Mission extends Model
 {
     use HasFactory;
@@ -24,6 +27,11 @@ class Mission extends Model
 
     public function people(){
         return $this->belongsToMany(Person::class);
+    }
+
+    public function office()
+    {
+        return $this->belongsTo(Office::class);
     }
 
     public function scopeDone(Builder $query): void

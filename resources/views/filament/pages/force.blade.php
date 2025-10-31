@@ -144,22 +144,22 @@
         <x-filament::tabs label="Content tabs">
             <x-filament::tabs.item alpine-active="activeTab === 'outsideMissions'" x-on:click="activeTab = 'outsideMissions'">
                 مأمورية عمل
-                <x-slot name="badge">{{ $this->peopleQuery(59)->count() }}</x-slot>
+                <x-slot name="badge">{{ $this->peopleQuery(\App\Models\Category::OUTSIDE_MISSION)->count() }}</x-slot>
             </x-filament::tabs.item>
     
             <x-filament::tabs.item alpine-active="activeTab === 'ousideAttached'" x-on:click="activeTab = 'ousideAttached'">
                 إلحاق خارج الوحدة
-                <x-slot name="badge">{{ $this->peopleQuery(21)->count() }}</x-slot>
+                <x-slot name="badge">{{ $this->peopleQuery(\App\Models\Category::OUTSIDE_ATTACHED)->count() }}</x-slot>
             </x-filament::tabs.item>
     
             <x-filament::tabs.item alpine-active="activeTab === 'insideMissions'" x-on:click="activeTab = 'insideMissions'">
                 مأمورية عمل طرفنا
-                <x-slot name="badge">{{ $this->peopleQuery(60, false)->count() }}</x-slot>
+                <x-slot name="badge">{{ $this->peopleQuery(\App\Models\Category::INSIDE_MISSION, false)->count() }}</x-slot>
             </x-filament::tabs.item>
     
             <x-filament::tabs.item alpine-active="activeTab === 'insideAttached'" x-on:click="activeTab = 'insideAttached'">
                 إلحاق على الوحدة
-                <x-slot name="badge">{{ $this->peopleQuery(20, false)->count() }}</x-slot>
+                <x-slot name="badge">{{ $this->peopleQuery(\App\Models\Category::INSIDE_ATTACHED, false)->count() }}</x-slot>
             </x-filament::tabs.item>
         </x-filament::tabs>
     

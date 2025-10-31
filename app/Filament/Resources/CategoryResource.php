@@ -7,11 +7,13 @@ use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -38,6 +40,11 @@ class CategoryResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->label('الاسم'),
+                Select::make('office_id')
+                    ->label('تابع')
+                    ->relationship('office', 'name')
+                    ->native(false)
+                    ->required(),
                 Repeater::make('tasks')
                     ->label('البنود')
                     ->relationship()
@@ -54,9 +61,10 @@ class CategoryResource extends Resource
                             ->label('الوصف')
                             ->columnSpanFull(),
                     ])
+                    ->columnSpanFull()
                     ->columns(2),
             ])
-            ->columns(1);
+            ->columns(2);
     }
 
     public static function table(Table $table): Table
@@ -66,9 +74,16 @@ class CategoryResource extends Resource
                 TextColumn::make('name')
                     ->label('نوع')
                     ->searchable(),
+                TextColumn::make('office.name')
+                    ->label('تابع')
+                    ->searchable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('office')
+                    ->label('تابع')
+                    ->relationship('office', 'name')
+                    ->searchable()
+                    ->preload()
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

@@ -49,6 +49,10 @@ class TanzimPanelProvider extends PanelProvider
                     ->label('القوة')
                     ->icon('heroicon-o-user-group')
                     ->collapsed(),
+                NavigationGroup::make()
+                    ->label('يوميات')
+                    ->icon('heroicon-o-presentation-chart-line')
+                    ->collapsed(),
             ])
             ->middleware([
                 EncryptCookies::class,

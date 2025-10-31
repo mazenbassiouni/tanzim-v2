@@ -67,4 +67,19 @@ class Person extends Model
             return SoldierResource::getUrl('view', ['record' => $this->id]);
         }
     }
+
+    static public function getPerson(int $id): ?Person
+    {
+        $person = Person::find($id);
+
+        if ($person->rank_id <= 21) {
+            $person = Officer::find($id);
+        } elseif ($person->rank_id <= 26) {
+            $person = SubOfficer::find($id);
+        } elseif ($person->rank_id == 27) {
+            $person = Soldier::find($id);
+        }
+
+        return $person;
+    }
 }

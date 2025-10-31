@@ -16,4 +16,9 @@ class ViewOfficer extends ViewRecord
             Actions\EditAction::make(),
         ];
     }
+
+    public static function authorizeResourceAccess(): void
+    {
+        abort_unless(auth()->user()->can('view_officer'), 403);
+    }
 }

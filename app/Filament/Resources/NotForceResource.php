@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\NotForceResource\Pages;
 use App\Filament\Resources\NotForceResource\RelationManagers;
+use App\Models\NotForcePerson;
 use App\Models\Person;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class NotForceResource extends Resource
 {
-    protected static ?string $model = Person::class;
+    protected static ?string $model = NotForcePerson::class;
 
     protected static ?string $navigationGroup = 'القوة';
 
@@ -24,7 +25,7 @@ class NotForceResource extends Resource
 
     protected static ?string $navigationLabel = 'الشطب';
 
-    // protected static ?string $modelLabel = 'جندى';
+    protected static ?string $modelLabel = 'شطب';
 
     protected static ?string $pluralLabel = 'الشطب';
 

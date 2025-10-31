@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SpecialityResource\Pages;
 use App\Filament\Resources\SpecialityResource\RelationManagers;
 use App\Models\Speciality;
+use App\Models\Unit;
 use Filament\Forms;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -54,6 +56,35 @@ class SpecialityResource extends Resource
                     ->preload()
                     ->hidden(fn (Get $get): bool => $get('is_officer') == true)
                     ->live(),
+                // Repeater::make('units')
+                //     ->label('الوحدات المرتبطة')
+                //     ->relationship('units')
+                //     ->columns(1)
+                //     ->schema([
+                //         Select::make('id')
+                //             ->label('الوحدة')
+                //             ->relationship('unit', 'name')
+                //             ->required()
+                //             ->searchable()
+                //             ->preload(),
+                //     ])
+                //     ->columnSpan('full'),
+                // Repeater::make('units')
+                //     ->relationship('units')
+                //     ->schema([
+                //         Select::make('id')
+                //             ->label('الوحدة')
+                //             ->options(Unit::pluck('name', 'id'))
+                //             ->required()
+                //             ->searchable(),
+
+                //         TextInput::make('pivot.peace_count')
+                //             ->label('الكمية')
+                //             ->numeric()
+                //             ->required(),
+                //     ])
+                //     ->columns(2)
+                //     ->columnSpanFull(),
             ]);
     }
 

@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ForceOverview extends BaseWidget
 {
-
     protected static ?string $permission = 'widget_ForceOverview';
+
+    protected static ?string $navigationLabel = 'التمام';
+
+    protected static ?string $headding = 'اجمالي القوة';
 
     public static function canView(): bool
     {
@@ -67,5 +70,10 @@ class ForceOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-plus')
                 ->color('success'),
         ];
+    }
+
+    public function getHeading(): string
+    {
+        return static::$headding ?? __('filament-shield::filament-shield.widgets.ForceOverview');
     }
 }

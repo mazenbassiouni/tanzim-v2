@@ -3,9 +3,9 @@
 namespace App\Filament\Resources\MissionResource\Pages;
 
 use App\Filament\Resources\MissionResource;
+use App\Models\Person;
 use Filament\Actions;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\TextEntry\TextEntrySize;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\FontWeight;
@@ -35,12 +35,12 @@ class ViewMission extends ViewRecord
                     ->date('l d/m/Y')
                     ->color('primary')
                     ->weight(FontWeight::Bold),
-                TextEntry::make('people.name')
+                TextEntry::make('people.id')
                     ->label('بخصوص')
                     ->html()
                     ->formatStateUsing(function (string $state): string {
-                        $person = $this->record->people->where('name', $state)->first();
-                        return '<a href="'.$person->getViewLink().'" target="_blank">'.$person->rank_name.'</a>';
+                        $person = Person::getPerson($state);
+                        return auth()->user()->can('view', $person) ? '<a href="'.$person->getViewLink().'">'.$person->rank_name.'</a>' : $person->rank_name;
                     })
                     ->listWithLineBreaks()
                     ->limitList(3)

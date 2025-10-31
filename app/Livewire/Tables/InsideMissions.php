@@ -25,7 +25,7 @@ class InsideMissions extends Component implements HasForms, HasTable
 
     public function table(Table $table): Table
     {
-        $query = Person::force()->whereHas('missions', function ($query) {
+        $query = Person::notForce()->whereHas('missions', function ($query) {
                 $query->where('category_id', $this->category_id)
                     ->whereHas('tasks', function ($query){
                         $query->where('status', '<>', 'done');

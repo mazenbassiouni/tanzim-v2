@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Unit extends Model
 {
@@ -15,4 +16,11 @@ class Unit extends Model
     const MAG_RAMADAN = [16,17,18,19,20,21,22];
     const MAG_FMC = [2,3,4,5,6];
     const KA3DA = [27];
+
+    public function specialities(): BelongsToMany
+    {
+        return $this->belongsToMany(Speciality::class)
+            ->using(SpecialityUnit::class)
+            ->withPivot(['peace_count', 'war_count']);
+    }
 }

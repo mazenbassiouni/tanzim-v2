@@ -32,9 +32,14 @@ class ListMissions extends ListRecords
                             TextInput::make('title')
                                 ->label('العنوان')
                                 ->required()
-                                ->columnSpanFull()
                                 ->hidden(fn (Get $get): bool => $get('category_id') != Category::GENERAL)
                                 ->maxLength(255),
+                            Select::make('office_id')
+                                ->label('تابع')
+                                ->relationship('office', 'name')
+                                ->native(false)
+                                ->hidden(fn (Get $get): bool => $get('category_id') != Category::GENERAL)
+                                ->required(),
                             Select::make('category_id')
                                 ->label('النوع')
                                 ->relationship('category', 'name')

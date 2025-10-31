@@ -47,7 +47,7 @@ class MissionResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('category.name')
-                    ->formatStateUsing(fn (Model $record, string $state): string => $record->category->id != Category::GENERAL ? $state : $record->title)
+                    ->formatStateUsing(fn (Model $record, string $state): string => $record->category_id != Category::GENERAL ? $state : $record->title)
                     ->label('النوع')
                     ->tooltip(fn (Model $record): string => $record->desc ?? ''),
                 TextColumn::make('people.name')
@@ -105,6 +105,8 @@ class MissionResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            ->paginated([10, 25, 50, 100, 'all'])
+            ->defaultPaginationPageOption(50)
             ->emptyStateHeading('لا توجد متابعات');
     }
 
