@@ -27,9 +27,9 @@ class UserPolicy
      * @param  \App\Models\User  $user
      * @return bool
      */
-    public function view(User $user): bool
+    public function view(User $user, User $model): bool
     {
-        return $user->can('view_user');
+        return $user->can('view_user') && ($model->id !== 1 || $user->id === 1);
     }
 
     /**
@@ -49,9 +49,9 @@ class UserPolicy
      * @param  \App\Models\User  $user
      * @return bool
      */
-    public function update(User $user): bool
+    public function update(User $user, User $model): bool
     {
-        return $user->can('update_user');
+        return $user->can('update_user') && ($model->id !== 1 || $user->id === 1);
     }
 
     /**

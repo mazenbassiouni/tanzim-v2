@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\RoleEnum;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
@@ -46,7 +47,11 @@ class UserResource extends Resource
                 Select::make('roles')
                     ->label('الصلاحيات')
                     ->multiple()
-                    ->relationship('roles', 'name')
+                    ->relationship('roles', 'name', function (Builder $query) {
+                        $query->when(auth()->id() !== 1, function (Builder $query) {
+                            $query->where('name', '!=', RoleEnum::SUPER_ADMIN->value);
+                        });
+                    })
                     ->preload()
                     ->columnSpanFull(),
                 TextInput::make('password')
@@ -96,7 +101,12 @@ class UserResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->modifyQueryUsing(function (Builder $query) {
+                if (auth()->id() !== 1) {
+                    $query->where('id', '!=', 1);
+                }
+            });
     }
 
     public static function getRelations(): array

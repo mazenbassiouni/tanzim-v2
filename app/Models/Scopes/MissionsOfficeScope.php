@@ -17,6 +17,10 @@ class MissionsOfficeScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
+        if (app()->runningInConsole()) {
+            return;
+        }
+
         $user = Auth::user();
 
         // No authenticated user → deny all

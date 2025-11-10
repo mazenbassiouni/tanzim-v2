@@ -14,7 +14,7 @@ class Category extends Model
     use HasFactory;
 
     const GENERAL = 1;
-    const pathological_COUNCIL = 3;
+    const PATHOLOGICAL_COUNCIL = 3;
     const TRIAL = 6;
     const CASE_UNDER_INVESTIGATION = 7;
     const INJURY_COUNCIL = 9;
@@ -27,7 +27,7 @@ class Category extends Model
 
 
     const PROMOTION_AND_RENEWAL_EFFECTS = [
-        self::pathological_COUNCIL,
+        self::PATHOLOGICAL_COUNCIL,
         self::TRIAL,
         self::CASE_UNDER_INVESTIGATION,
         self::INJURY_COUNCIL

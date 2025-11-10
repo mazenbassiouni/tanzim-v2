@@ -46,6 +46,7 @@ class SoldierResource extends Resource
                     ->required(),
                 Select::make('rank_id')
                     ->label('الدرجة')
+                    ->native(false)
                     ->disabled()
                     ->default(27)
                     ->relationship(name: 'rank',titleAttribute: 'name', modifyQueryUsing: fn (Builder $query) => $query->where('id', 27))

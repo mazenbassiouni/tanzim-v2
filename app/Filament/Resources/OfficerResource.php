@@ -48,6 +48,7 @@ class OfficerResource extends Resource
                 Select::make('rank_id')
                     ->label('الرتبة')
                     ->relationship(name: 'rank',titleAttribute: 'name', modifyQueryUsing: fn (Builder $query) => $query->where('id', '<=', 21)->orderBy('id'))
+                    ->native(false)
                     ->required(),
                 TextInput::make('name')
                     ->label('الاسم')

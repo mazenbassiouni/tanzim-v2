@@ -114,6 +114,7 @@ class MissionResource extends Resource
     {
         return [
             RelationManagers\TasksRelationManager::class,
+            RelationManagers\ActivityLogRelationManager::class,
         ];
     }
 

@@ -74,8 +74,6 @@ class ListMissions extends ListRecords
                         ]),
                 ])
                 ->after(function (Mission $record) {
-                    MissionCreated::dispatch($record);
-                    
                     redirect()->to(MissionResource::getUrl('edit', ['record' => $record->id]));
                 }),
         ];

@@ -42,7 +42,9 @@ class SubOfficerResource extends Resource
                     ->label('الرقم العسكرى')
                     ->required(),
                 Select::make('rank_id')
+                ->default(26)
                     ->label('الدرجة')
+                    ->native(false)
                     ->relationship(name: 'rank',titleAttribute: 'name', modifyQueryUsing: fn (Builder $query) => $query->whereBetween('id', [22, 26])->orderBy('id'))
                     ->required(),
                 TextInput::make('name')
@@ -68,6 +70,7 @@ class SubOfficerResource extends Resource
                     ->native(false)
                     ->required(),  
                 DatePicker::make('join_date')
+                ->default('2025-10-6')
                     ->label('تاريخ الضم')
                     ->required(fn (Get $get) => !$get('is_mission') || $get('is_force'))
                     ->hidden(fn (Get $get) => !$get('is_force') && $get('is_mission')),

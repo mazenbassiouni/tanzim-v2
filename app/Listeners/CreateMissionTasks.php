@@ -21,14 +21,6 @@ class CreateMissionTasks
      */
     public function handle(MissionCreated $event): void
     {
-        $mission = $event->mission;
-
-        $mission->category->tasks->each(function ($task) use ($mission) {
-            $mission->tasks()->create([
-                'title' => $task->title,
-                'desc' => $task->desc,
-                'status' => $task->status,
-            ]);
-        });
+        $event->mission->addDefaultTasksSilently();
     }
 }
