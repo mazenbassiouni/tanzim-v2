@@ -28,6 +28,10 @@ class Person extends Model
         return $this->belongsTo(Speciality::class);
     }
 
+    public function personFunction(){
+        return $this->belongsTo(PersonFunction::class, 'function_id');
+    }
+
     public function milUnit(){
         return $this->belongsTo(Unit::class, 'mil_unit_id');
     }

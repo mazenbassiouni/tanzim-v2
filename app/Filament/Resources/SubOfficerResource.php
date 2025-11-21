@@ -48,6 +48,7 @@ class SubOfficerResource extends Resource
                     ->relationship(name: 'rank',titleAttribute: 'name', modifyQueryUsing: fn (Builder $query) => $query->whereBetween('id', [22, 26])->orderBy('id'))
                     ->required(),
                 TextInput::make('name')
+                    ->columnSpanFull()
                     ->label('الاسم')
                     ->required(),
                 Select::make('speciality_id')
@@ -56,6 +57,13 @@ class SubOfficerResource extends Resource
                     ->native(false)
                     ->searchable()
                     ->preload()
+                    ->required(fn (Get $get) => !$get('is_mission') || $get('is_force'))
+                    ->hidden(fn (Get $get) => !$get('is_force') && $get('is_mission')),
+                Select::make('function_id')
+                    ->label('الوظيفة')
+                    ->relationship(name: 'personFunction',titleAttribute: 'name', modifyQueryUsing: fn (Builder $query) => $query->where('is_officer', false)->orderBy('name'))
+                    ->native(false)
+                    ->searchable()
                     ->required(fn (Get $get) => !$get('is_mission') || $get('is_force'))
                     ->hidden(fn (Get $get) => !$get('is_force') && $get('is_mission')),
                 Select::make('mil_unit_id')
@@ -133,7 +141,11 @@ class SubOfficerResource extends Resource
                     ->label('التسكين الداخلى')
                     ->toggleable(),
                 TextColumn::make('speciality.name')
-                    ->label('التخصص'),
+                    ->label('التخصص')
+                    ->toggleable(),
+                TextColumn::make('personFunction.name')
+                    ->label('الوظيفة')
+                    ->toggleable(),
                 TextColumn::make('speciality.category.name')
                     ->label('الفئة')
                     ->toggleable(isToggledHiddenByDefault: true),

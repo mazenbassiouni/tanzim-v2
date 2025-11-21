@@ -53,6 +53,7 @@ class SoldierResource extends Resource
                     ->required(),
                 TextInput::make('name')
                     ->label('الاسم')
+                    ->columnSpanFull()
                     ->required(),
                 Select::make('speciality_id')
                     ->label('التخصص')
@@ -60,6 +61,13 @@ class SoldierResource extends Resource
                     ->native(false)
                     ->searchable()
                     ->preload()
+                    ->required(fn (Get $get) => !$get('is_mission') || $get('is_force'))
+                    ->hidden(fn (Get $get) => !$get('is_force') && $get('is_mission')),
+                Select::make('person_function_id')
+                    ->label('الوظيفة')
+                    ->relationship(name: 'personFunction',titleAttribute: 'name', modifyQueryUsing: fn (Builder $query) => $query->where('is_officer', false)->orderBy('name'))
+                    ->native(false)
+                    ->searchable()
                     ->required(fn (Get $get) => !$get('is_mission') || $get('is_force'))
                     ->hidden(fn (Get $get) => !$get('is_force') && $get('is_mission')),
                 Select::make('mil_unit_id')
@@ -147,7 +155,11 @@ class SoldierResource extends Resource
                     ->label('التسكين الداخلى')
                     ->toggleable(),
                 TextColumn::make('speciality.name')
-                    ->label('التخصص'),
+                    ->label('التخصص')
+                    ->toggleable(),
+                TextColumn::make('personFunction.name')
+                    ->label('الوظيفة')
+                    ->toggleable(),
                 TextColumn::make('speciality.category.name')
                     ->label('الفئة')
                     ->toggleable(isToggledHiddenByDefault: true),
