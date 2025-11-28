@@ -63,7 +63,7 @@ class SoldierResource extends Resource
                     ->preload()
                     ->required(fn (Get $get) => !$get('is_mission') || $get('is_force'))
                     ->hidden(fn (Get $get) => !$get('is_force') && $get('is_mission')),
-                Select::make('person_function_id')
+                Select::make('function_id')
                     ->label('الوظيفة')
                     ->relationship(name: 'personFunction',titleAttribute: 'name', modifyQueryUsing: fn (Builder $query) => $query->where('is_officer', false)->orderBy('name'))
                     ->native(false)
